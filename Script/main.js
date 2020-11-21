@@ -138,10 +138,11 @@ async function calculateScore() {
     let player4 = optionsSelected.playerNames[3];
     let playerScores = [];
     let score1 = 0;
+    console.log(player1)
     if(optionsSelected.numberOfPlayers == 1) {
         for(let i = 0; i < processedData.length; i++) {
             score1 += document.getElementById(`${player1}${i}`.value)
-            console.log(document.getElementById(`${player1}${i}`.value))
+            console.log(document.getElementById(`${player1}${i}`))
             console.log(score1)
         }
     }
