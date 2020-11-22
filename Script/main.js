@@ -3,27 +3,19 @@ import { getCourseData } from "./apiCall.js"
 
 $('#courseDropdown').change(function (event) {
     optionsSelected.courseOption = event.target.value;
-    console.log(optionsSelected.courseOption)
-    console.log(optionsSelected);
     scorecardData()
 })
 
 $('#teeTypeDropDown').change(function (event) {
     optionsSelected.teeOption = event.target.value;
-    console.log(optionsSelected.teeOption)
-    console.log(optionsSelected)
     scorecardData()
 })
 $('#holesDropdown').change(function (event) {
     optionsSelected.numberOfHoles = event.target.value;
-    console.log(optionsSelected.numberOfHoles)
-    console.log(optionsSelected)
     scorecardData()
 })
 $('#submitOptions').click(function (event) {
-    validateOptions();
-    scorecardData();
-    populateScoreCard();
+    validateDropdownOptions();
 })
 
 $('#playerDropdown').change(function (event) {
@@ -34,48 +26,66 @@ function createPlayerEntry() {
     const playerOption = event.target.value;
     optionsSelected.numberOfPlayers = event.target.value;
     const playerEntry = document.getElementById('player-name-entry')
-    console.log(optionsSelected.numberOfPlayers)
-    console.log(optionsSelected);
     const header = `
         <div>
         <h4 class='d-flex flex-column align-items-center' aria-describedby="playerNameHeader">
         Enter the player names: 
         </h4>
-        <small id="playerNameHeader" class="text-muted d-flex flex-column align-items-center">
+        <small id="playerNameWarning" class="d-flex flex-column align-items-center">
             Names entered cannot match other players
       </small>
       </div>
     `
     playerEntry.innerHTML = header;
     let playerNumber = parseInt(playerOption);
-    const playerTemplate = `
+    const playerTemplate = (id) => `
     <div class='justify-content-center row'>
-            <p> Player:  <p>
-                <input class='col-md names form-control' type="text" placeholder="Name">
+            <p class="player"> Player:  <p>
+                <input id="player-${id}" class='col-md names form-control' type="text" placeholder="Name">
     </div> `
-    for (let i = 1; i <= playerNumber; i++) {
-        playerEntry.innerHTML += playerTemplate;
+    for (let i = 0; i < playerNumber; i++) {
+        playerEntry.innerHTML += playerTemplate(i);
     }
-    const names = document.getElementsByClassName('names');
-    for (let i = 0; i < names.length; i++) {
-        names[i].id = `names${i}`;
-        console.log(names[i])
+    for (let i = 0; i < playerNumber; i++) {
+        $(`#player-${i}`).blur(function (event) {
+            getNameData();
+            compareNames(i);
+        })
     }
-    $('.names').blur(function (event) {
-        getNameData();
-    })
+}
+
+function compareNames(currentSelectedId) {
+    const namesClass = document.getElementsByClassName('names');
+    let duplicateNames = false;
+    const selectedNameInput = document.getElementById(`player-${currentSelectedId}`);
+    for (let i = 0; i < namesClass.length; i++) {
+        const nameInput = document.getElementById(`player-${i}`);
+        if (nameInput.value == selectedNameInput.value && nameInput.id != selectedNameInput.id) {
+            //where we find a duplicate
+            duplicateNames = true;
+        }
+    }
+    if (duplicateNames == true) {
+        selectedNameInput.classList.add('is-invalid');
+    }
+    else {
+        selectedNameInput.classList.remove('is-invalid');
+    }
+    optionsSelected.duplicateNames = duplicateNames;
+    optionsSelected.nameInput[currentSelectedId] = currentSelectedId;
 }
 
 function getNameData() {
     const namesClass = document.getElementsByClassName('names');
-    console.log(namesClass);
     let playerNames = [];
     for (let i = 0; i < namesClass.length; i++) {
-        playerNames.push(namesClass[i].value);
+        const player = {
+            name: namesClass[i].value,
+            score: 0
+        };
+        playerNames.push(player);
     }
-    console.log(playerNames)
     optionsSelected.playerNames = playerNames;
-    console.log(optionsSelected)
 }
 
 async function scorecardData() {
@@ -122,32 +132,23 @@ async function scorecardData() {
         course.parTotal += course[i].par;
         course.hcpTotal += course[i].hcp;
         course.yardsTotal += course[i].yards;
-
     }
+    optionsSelected.totalPar = course.parTotal;
     return course;
 }
 
 async function calculateScore() {
     const processedData = await scorecardData();
-    //have a for loop for each player, grab length of holes, 
-    //loop through those id on the inputs and add them for that player. 
-    //then, add player score to player score total.
-    let player1 = optionsSelected.playerNames[0];
-    let player2 = optionsSelected.playerNames[1];
-    let player3 = optionsSelected.playerNames[2];
-    let player4 = optionsSelected.playerNames[3];
-    let playerScores = [];
-    let score1 = 0;
-    console.log(player1)
-    if(optionsSelected.numberOfPlayers == 1) {
-        for(let i = 0; i < processedData.length; i++) {
-            score1 += document.getElementById(`${player1}${i}`.value)
-            console.log(document.getElementById(`${player1}${i}`))
-            console.log(score1)
+    for (let count = 0; count < optionsSelected.playerNames.length; count++) {
+        let score = 0;
+        for (let i = 0; i < processedData.length; i++) {
+            let aScore = parseInt(document.getElementById(`${optionsSelected.playerNames[count].name}${i}`).value)
+            score += isNaN(aScore) ? 0 : aScore;
         }
+        document.getElementById(`scoreTotal${count}`).innerText = score;
+        document.getElementById(`scoreTotal${count}`).innerText = score;
+        optionsSelected.playerNames[count].score = score;
     }
-    console.log(score1)
-
 }
 
 window.calculateScore = calculateScore;
@@ -168,16 +169,20 @@ async function populateScoreCard() {
     <tr>
     <th>Par</th>
     `
+    let handicapRow = `
+    <tr>
+    <th>Handicap</th>
+    `
 
     let namesArray = [];
     for (let i = 0; i < optionsSelected.playerNames.length; i++) {
         let nameRow = `
         <tr>
-        <th>${optionsSelected.playerNames[i]}</th>
+        <th>${optionsSelected.playerNames[i].name}</th>
         `
-        for (let i = 0; i < processedData.length; i++) {
+        for (let j = 0; j < processedData.length; j++) {
             nameRow += `
-            <td><input id="${optionsSelected.playerNames}${i}" onkeyup="calculateScore()" type="number"></td>
+            <td><input class='scoreInput${i}' id="${optionsSelected.playerNames[i].name}${j}" onkeyup="calculateScore()" type="number"></td>
             `
         }
         nameRow += `
@@ -197,10 +202,13 @@ async function populateScoreCard() {
         parRow += `
         <td>${processedData[i].par}</td>
         `
+        handicapRow += `
+        <td>${processedData[i].hcp}</td>
+        `
     }
     scorecardDiv.innerHTML = `
     ${holesRow}
-    <td>Total</td>
+    <th>Total</th>
     </tr>
     ${yardsRow}
     <td>${processedData.yardsTotal}</td>
@@ -208,27 +216,94 @@ async function populateScoreCard() {
     ${parRow}
     <td>${processedData.parTotal}</td>
     </tr>
+    ${handicapRow}
+    <td>${processedData.hcpTotal}</td>
+    </tr>
     ${namesArray.join('')}
     </tbody>
     `
+    for(let i = 0; i < processedData.length; i++) {
+        const scoreInput = $(`.scoreInput${i}`);
+        scoreInput.blur(function (event) {
+            checkScoreInputs(i);
+        })
+    }
 }
 
-function validateOptions() {
-    const allForms = document.getElementsByClassName('form-control');
+function checkScoreInputs(playerId) {
+    const scoreInputs =  document.getElementsByClassName(`scoreInput${playerId}`)
+    let allInputsFilled = true;
+    for(let i = 0; i < scoreInputs.length; i++) {
+        if(!scoreInputs[i].value) {
+            allInputsFilled = false;
+        }
+    }
+    if(allInputsFilled) {
+        finalScore(playerId);
+    }
+}
+
+function validateDropdownOptions() {
+    const allForms = document.getElementsByClassName('checkValid');
+    let formControlValid = true;
+    let nameValid = true;
     for (let i = 0; i < allForms.length; i++) {
         if (allForms[i].value == '0') {
             allForms[i].classList.add('is-invalid');
+            formControlValid = false;
         } else {
             allForms[i].classList.remove('is-invalid');
         }
     };
-    const names = document.getElementsByClassName('names');
+    const nameDropdown = document.getElementsByClassName('checkPlayerValid');
+    for (let i = 0; i < nameDropdown.length; i++) {
+        if (nameDropdown[i].value == '0') {
+            nameDropdown[i].classList.add('is-invalid');
+            nameValid = false;
+        }
+        else {
+            nameDropdown[i].classList.remove('is-invalid');
+        }
+    }
+    const names = document.getElementsByClassName('names')
     for (let i = 0; i < names.length; i++) {
         if (names[i].value == '') {
             names[i].classList.add('is-invalid');
+            nameValid = false;
         }
         else {
-            names[i].classList.remove('is-invalid');
+            if (names[i].id != `player-${optionsSelected.nameInput[i]}`) {
+                names[i].classList.remove('is-invalid');
+            }
         }
     }
+    optionsSelected.formValidity = nameValid && formControlValid && !optionsSelected.duplicateNames;
+    // optionsSelected.formValidity = nameValid == true && formControlValid == true ? true : false;
+    if (optionsSelected.formValidity) {
+        if($('#forms-container').is(':visible')) {
+            $('#forms-container').hide();
+        }
+        scorecardData();
+        populateScoreCard();
+    }
 };
+
+
+function finalScore(playerId) {
+        const playerScore = parseInt(optionsSelected.playerNames[playerId].score);
+        const scoreVsPar = playerScore - parseInt(optionsSelected.totalPar);
+        const playerName = optionsSelected.playerNames[playerId].name;
+        if (playerScore > optionsSelected.totalPar) {
+            document.getElementById(`scoreDetails`).innerHTML = `${playerName}'s final score is ${scoreVsPar}`
+            document.getElementById(`finalMessage`).innerHTML = "Keep practicing that swing!"
+        }
+        if (playerScore == optionsSelected.totalPar) {
+            document.getElementById(`scoreDetails`).innerHTML = `${playerName}'s final score is 0`
+            document.getElementById(`finalMessage`).innerHTML = 'Right on the money!'
+        }
+        if (playerScore < optionsSelected.totalPar) {
+            document.getElementById(`scoreDetails`).innerHTML = `${playerName}'s final score is ${playerScore}`
+            document.getElementById(`finalMessage`).innerHTML = 'On to the PGA!'
+        }
+    $('#finalScoreMessage').modal('show')
+}

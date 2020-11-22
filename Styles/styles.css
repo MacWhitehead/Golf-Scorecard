@@ -1,13 +1,82 @@
-input {
-  padding: 0px 5px;
-  width: 20px;
-  border: none;
+body {
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+
+#forms-container {
+  background-image: url("/Images/matt-aylward-Nmh-pEBRt2Y-unsplash.jpg");
+  background-repeat: no-repeat;
+  height: 630px;
+  background-position: center;
+  background-size: cover;
+}
+#forms-container #header {
+  background-color: #dce1de;
+  margin: 10px;
+  width: 80%;
+  padding: 10px;
+  text-align: center;
+  font-size: 12px;
+  border: 1px solid black;
+  box-shadow: 5px 5px black;
+}
+#forms-container h6 {
+  font-size: 10px;
+  margin: 0px;
+  text-align: center;
+}
+#forms-container #dropdowns {
+  max-width: 70%;
+}
+#forms-container .player {
+  text-align: center;
+  padding-top: 5px;
+  color: white;
+}
+#forms-container select {
+  border: 1px solid black;
+  box-shadow: 5px 5px black;
+}
+#forms-container h4 {
+  text-align: center;
+  color: white;
+}
+#forms-container #playerNameWarning {
+  color: white;
+  text-align: center;
 }
 
 .table-container {
   display: relative;
   overflow-x: scroll;
   max-width: 100%;
+  padding: 30px 15px;
+  text-align: center;
+  justify-content: center;
+  margin: auto;
+}
+.table-container input {
+  padding: 0px 5px;
+  width: 20px;
+  border: none;
+  background-color: inherit;
+}
+.table-container #scorecard {
+  border: none;
+  margin-left: auto;
+  margin-right: auto;
+}
+.table-container .table-bordered > tbody > tr > td, .table-container .table-bordered > tbody > tr > th, .table-container .table-bordered > tfoot > tr > td, .table-container .table-bordered > tfoot > tr > th, .table-container .table-bordered > thead > tr > td, .table-container .table-bordered > thead > tr > th {
+  border: 1px solid black;
+}
+.table-container .table-striped tbody tr:nth-of-type(odd) {
+  background-color: whitesmoke;
+}
+.table-container .table-striped tbody tr:nth-of-type(even) {
+  background-color: #40916c;
+}
+.table-container .table-striped tbody tr:first-of-type {
+  background-color: #245501;
+  color: #bfccc4;
 }
 
 /*# sourceMappingURL=styles.css.map */

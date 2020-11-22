@@ -11,59 +11,83 @@
 </head>
 
 <body>
-    <div id="forms-container" class="d-flex flex-column align-items-center">
-        <div>
-            <h2>Golf Scorecard</h2>
-        </div>
-        <div id="dropdowns" class="form-group d-flex flex-column justify-content-center">
-            <select name="courses" id="courseDropdown" class="form-control">
-                <option value="0"> Please select a course</option>
-                <option value="18300" id='18300'>Fox Hollow</option>
-                <option value="11819" id='11819'>Thanksgiving Point</option>
-                <option value="19002" id='19002'>Spanish Oaks</option>
-            </select>
-            <select name="teeType" id="teeTypeDropDown" class="form-control">
-                <option value="0"> Please select the tee type:</option>
-                <option value="champ" id='champion'>Champion Tee</option>
-                <option value="pro" id='professional'>Professional Tee</option>
-                <option value="men" id='men'>Men's Tee</option>
-                <option value="women" id='women'>Women's Tee</option>
-            </select>
-            <select name="holes" id="holesDropdown" class="form-control">
-                <option value="0"> Please select the number of holes to play</option>
-                <option value="front9" id='front9'>Front 9</option>
-                <option value="back9" id='back9'>Back 9</option>
-                <option value="full18" id='full18'>Full 18</option>
-            </select>
-            <select name="playerSelect" id="playerDropdown" class="form-control">
-                <option value="0"> Please select the number of players:</option>
-                <option value="1" id='1'>1 Player</option>
-                <option value="2" id='2'>2 Players</option>
-                <option value="3" id='3'>3 Players</option>
-                <option value="4" id='4'>4 Players</option>
-                </select>
-        </div>
-        <div id="player-name-entry"></div>
-
+    <div id="forms-container">
         <div class="d-flex flex-column align-items-center">
-            <button id="submitOptions" class="btn btn-success">Submit</button>
+            <div id="header" class="d-flex flex-column align-items-center">
+                <h2 class="justify-content-center">Welcome to the Golf Scorecard App!</h2>
+                <div id="bestExp">
+                    <h6>Once the scorecard populates, please turn phone horizontal for best experience</h6>
+                    <h6>Please select your course options below:</h6>
+                </div>
+            </div>
+            <div id="dropdowns" class="form-group d-flex flex-column justify-content-center">
+                <select name="courses" id="courseDropdown" class="checkValid form-control">
+                    <option value="0"> Please select a course</option>
+                    <option value="18300" id='18300'>Fox Hollow</option>
+                    <option value="11819" id='11819'>Thanksgiving Point</option>
+                    <option value="19002" id='19002'>Spanish Oaks</option>
+                </select>
+                <select name="teeType" id="teeTypeDropDown" class="checkValid form-control">
+                    <option value="0"> Please select the tee type:</option>
+                    <option value="champ" id='champion'>Champion Tee</option>
+                    <option value="pro" id='professional'>Professional Tee</option>
+                    <option value="men" id='men'>Men's Tee</option>
+                    <option value="women" id='women'>Women's Tee</option>
+                </select>
+                <select name="holes" id="holesDropdown" class="checkValid form-control">
+                    <option value="0"> Please select the number of holes to play</option>
+                    <option value="front9" id='front9'>Front 9</option>
+                    <option value="back9" id='back9'>Back 9</option>
+                    <option value="full18" id='full18'>Full 18</option>
+                </select>
+                <select name="playerSelect" id="playerDropdown" class="checkPlayerValid form-control">
+                    <option value="0"> Please select the number of players:</option>
+                    <option value="1" id='1'>1 Player</option>
+                    <option value="2" id='2'>2 Players</option>
+                    <option value="3" id='3'>3 Players</option>
+                    <option value="4" id='4'>4 Players</option>
+                </select>
+            </div>
+            <div id="player-name-entry"></div>
+
+            <div class="d-flex flex-column align-items-center">
+                <button id="submitOptions" class="btn btn-success border">Submit</button>
+            </div>
         </div>
     </div>
-    <div class="table-container">
-            <table id="scorecard" class="table table-striped table-bordered table-responsive">
 
-            </table>
+    <div class="table-container">
+        <table id="scorecard" class="table table-striped table-bordered table-responsive">
+
+        </table>
     </div>
 
+    <div class="modal fade" id="finalScoreMessage" tabindex="-1" role="dialog" aria-labelledby="finalScoreMessage"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="roundFinished">You finished the round!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h3 id="scoreDetails"></h3>
+                    <p id="finalMessage"></p>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
         crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="module" src="./Script/main.js"></script>
     <script type="module" src="./Script/state.js"></script>
     <script type="module" src="./Script/apiCall.js"></script>
