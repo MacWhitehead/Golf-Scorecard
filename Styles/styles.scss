@@ -5,7 +5,6 @@ body {
 #forms-container {
     background-image: url('/Images/matt-aylward-Nmh-pEBRt2Y-unsplash.jpg');
     background-repeat: no-repeat;
-    height: 630px;
     background-position: center;
     background-size: cover;
 
@@ -19,41 +18,39 @@ body {
         border: 1px solid black;
         box-shadow: 5px 5px black;
     }
-    
+
     h6 {
         font-size: 10px;
         margin: 0px;
         text-align: center;
     }
-    
+
     #dropdowns {
         max-width: 70%;
     }
-    
+
     .player {
         text-align: center;
         padding-top: 5px;
         color: white;
     }
-    
+
     select {
         border: 1px solid black;
         box-shadow: 5px 5px black;
     }
-    
+
     h4 {
         text-align: center;
         color: white;
     }
-    
+
     #playerNameWarning {
         color: white;
         text-align: center;
     }
 
 }
-
-
 
 .table-container {
     display: relative;
@@ -63,29 +60,48 @@ body {
     text-align: center;
     justify-content: center;
     margin: auto;
+
     input {
-        padding: 0px 5px;
-        width: 20px;
+        width: 40px;
         border: none;
         background-color: inherit;
     }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+
     #scorecard {
         border: none;
         margin-left: auto;
         margin-right: auto;
     }
-    
-    .table-bordered > tbody > tr > td, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > td, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > thead > tr > th {
+
+    .table-bordered>tbody>tr>td,
+    .table-bordered>tbody>tr>th,
+    .table-bordered>tfoot>tr>td,
+    .table-bordered>tfoot>tr>th,
+    .table-bordered>thead>tr>td,
+    .table-bordered>thead>tr>th {
         border: 1px solid black;
     }
+
     .table-striped tbody tr:nth-of-type(odd) {
         background-color: whitesmoke;
     }
+
     .table-striped tbody tr:nth-of-type(even) {
         background-color: #40916c;
     }
-    
-    
+
+
     .table-striped tbody tr:first-of-type {
         background-color: #245501;
         color: #bfccc4;

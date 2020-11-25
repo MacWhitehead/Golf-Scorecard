@@ -5,7 +5,6 @@ body {
 #forms-container {
   background-image: url("/Images/matt-aylward-Nmh-pEBRt2Y-unsplash.jpg");
   background-repeat: no-repeat;
-  height: 630px;
   background-position: center;
   background-size: cover;
 }
@@ -53,19 +52,32 @@ body {
   text-align: center;
   justify-content: center;
   margin: auto;
+  /* Firefox */
 }
 .table-container input {
-  padding: 0px 5px;
-  width: 20px;
+  width: 40px;
   border: none;
   background-color: inherit;
+}
+.table-container input::-webkit-outer-spin-button,
+.table-container input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.table-container input[type=number] {
+  -moz-appearance: textfield;
 }
 .table-container #scorecard {
   border: none;
   margin-left: auto;
   margin-right: auto;
 }
-.table-container .table-bordered > tbody > tr > td, .table-container .table-bordered > tbody > tr > th, .table-container .table-bordered > tfoot > tr > td, .table-container .table-bordered > tfoot > tr > th, .table-container .table-bordered > thead > tr > td, .table-container .table-bordered > thead > tr > th {
+.table-container .table-bordered > tbody > tr > td,
+.table-container .table-bordered > tbody > tr > th,
+.table-container .table-bordered > tfoot > tr > td,
+.table-container .table-bordered > tfoot > tr > th,
+.table-container .table-bordered > thead > tr > td,
+.table-container .table-bordered > thead > tr > th {
   border: 1px solid black;
 }
 .table-container .table-striped tbody tr:nth-of-type(odd) {
